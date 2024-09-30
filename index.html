@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90s Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="DC Comics Logo">
+    <h1>90s Music</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "'Make it last forever, friendship never ends' is a lyric from which 90s song?", answer: "Wannabe – Spice Girls" },
+        { question: "Who was the lead singer of No Doubt?", answer: "Gwen Stefani" },
+        { question: "'Bitter Sweet Symphony' was a song from which album by The Verve?", answer: "Urban Hymns" },
+        { question: "'As I walk through the valley of the shadow of death' is an opening line from which artist?", answer: "Coolio" },
+        { question: "In what year did Bryan Adams have a hit with 'Everything I Do, I Do It For You'?", answer: "1991" },
+        { question: "Where was the music video for Britney Spears’ 'Baby One More Time' set?", answer: "In a school" },
+        { question: "RZA, Method Man, and Ghostface Killah were all members of which hip hop group?", answer: "Wu-Tang Clan" },
+        { question: "'Definitely Maybe', 'Monster', and 'The Division Bell' were all albums released in what year?", answer: "1994" },
+        { question: "Who did Lou Bega need a little bit of in his life?", answer: "Monica" },
+        { question: "Nirvana’s final performance in the UK was at which music festival?", answer: "Reading Festival" },
+        { question: "Which singer is also known as Mr. Boombastic?", answer: "Shaggy" },
+        { question: "According to Chumbawamba’s 'Tubthumping', what is the first drink he drinks?", answer: "A whiskey drink" },
+        { question: "What is Vanilla Ice’s real name?", answer: "Robert Matthew Van Winkle" },
+        { question: "'Stay Another Day' was a UK Christmas number one for which boyband?", answer: "East 17" },
+        { question: "Who released 'Baby Got Back' in 1992?", answer: "Sir Mix-A-Lot" },
+        { question: "What was Radiohead’s debut album called?", answer: "Pablo Honey" },
+        { question: "OMC were a music group from which country?", answer: "New Zealand" },
+        { question: "What does 'Livin’ La Vida Loca' translate to in English?", answer: "Living the crazy life" },
+        { question: "'November Rain' was a single by which rock band?", answer: "Guns N’ Roses" },
+        { question: "According to Blink-182, nobody likes you when you’re how old?", answer: "23" },
+        { question: "Which boyband had a hit with 'I Want It That Way'?", answer: "Backstreet Boys" },
+        { question: "Atomic Kitten formed in which English city in 1998?", answer: "Liverpool" },
+        { question: "What are the first names of the Gallagher brothers from Oasis?", answer: "Liam & Noel" },
+        { question: "Thomas Bangalter & Guy-Manuel de Homem-Christo are better known as which electronic duo?", answer: "Daft Punk" },
+        { question: "In what year was the boyband Five formed?", answer: "1997" },
+        { question: "Which member of Take That had a 1997 solo hit with 'Clementine'?", answer: "Mark Owen" },
+        { question: "The Rembrandts are best known for the theme song to which US sitcom?", answer: "Friends" },
+        { question: "Westlife & Boyzone were both created by which music manager and TV personality?", answer: "Louis Walsh" },
+        { question: "Which girl band had the slogan 'Girl Power'?", answer: "Spice Girls" },
+        { question: "What is Eminem’s real name?", answer: "Marshall Mathers" },
+        { question: "'Disco 2000' was a song by which English band?", answer: "Pulp" },
+        { question: "What was the name of Destiny’s Child’s second album released in 1999?", answer: "The Writing’s on the Wall" },
+        { question: "The Notorious B.I.G. was born and raised in which New York borough?", answer: "Brooklyn" },
+        { question: "In the music video for 'Let Me Entertain You', The Robbie Williams Band are dressed up as members of which rock band?", answer: "KISS" },
+        { question: "Which 1998 Madonna album featured the hit single 'Frozen'?", answer: "Ray of Light" },
+        { question: "Whitney Houston’s 'I Will Always Love You' was featured in which Hollywood film?", answer: "The Bodyguard" },
+        { question: "How many members were in the Backstreet Boys?", answer: "5" },
+        { question: "Which female band had hits with 'No Scrubs,' 'Unpretty,' and 'Waterfalls'?", answer: "TLC" },
+        { question: "Who is the lead singer for Red Hot Chili Peppers?", answer: "Anthony Kiedis" },
+        { question: "Lauryn Hill, Wyclef Jean, and Pras Michel were all members of which hip hop group?", answer: "The Fugees" },
+        { question: "Who never meant to make Ms. Jackson’s daughter cry?", answer: "Outkast" },
+        { question: "Which band covered David Bowie’s 'The Man Who Sold the World' for their MTV Unplugged concert?", answer: "Nirvana" },
+        { question: "Björk hails from which country?", answer: "Iceland" },
+        { question: "What type of dog features on the cover for Blur’s third studio album 'Parklife'?", answer: "Greyhounds" },
+        { question: "'Bed of Roses' was a 1993 single by which American rock band?", answer: "Bon Jovi" },
+        { question: "Who was the lead singer of R.E.M.?", answer: "Michael Stipe" },
+        { question: "'Nuthin’ But a G Thang' was a collaboration between which two West Coast rappers?", answer: "Dr. Dre & Snoop Dogg" },
+        { question: "In what year did The Prodigy release 'Firestarter' and 'Breathe'?", answer: "1996" },
+        { question: "What song did Elton John perform at Princess Diana’s funeral?", answer: "Candle in the Wind" },
+        { question: "According to Sinead O’Connor, nothing compares to who?", answer: "You" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
